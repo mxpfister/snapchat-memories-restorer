@@ -70,6 +70,8 @@ const i18n = {
     privacyNote: 'When loading the page, IP addresses are technically processed by the hosting provider.',
     disclaimer: 'Disclaimer',
     disclaimerText: 'This project is not affiliated with Snapchat Inc., Snap Inc., or their products. It is an independent community tool for processing export files.',
+    imprint: 'Impressum',
+    privacyPolicy: 'Datenschutz',
     
     // Errors
     criticalError: 'Critical error: {msg}',
@@ -171,6 +173,8 @@ const i18n = {
     privacyNote: 'Beim Aufruf der Seite werden technisch bedingt IP-Adressen vom Hosting-Provider verarbeitet.',
     disclaimer: 'Disclaimer',
     disclaimerText: 'Dieses Projekt steht in keiner Verbindung mit Snapchat Inc., Snap Inc. oder deren Produkten. Es ist ein unabhängiges Community-Tool zur Verarbeitung von Export-Dateien.',
+    imprint: 'Impressum',
+    privacyPolicy: 'Datenschutz',
     
     // Errors
     criticalError: 'Kritischer Fehler: {msg}',
@@ -335,6 +339,13 @@ export function updatePageLanguage() {
     if (footerParagraphs[0]) footerParagraphs[0].innerHTML = `<strong>${t('privacy100')}:</strong> ${t('privacyDesc')}`;
     if (footerParagraphs[1]) footerParagraphs[1].textContent = t('privacyNote');
     if (footerParagraphs[2]) footerParagraphs[2].innerHTML = `<strong>⚖️ ${t('disclaimer')}:</strong> ${t('disclaimerText')}`;
+    
+    // Update footer links
+    const footerLinks = footer.querySelectorAll('.footer-link');
+    if (footerLinks.length >= 2) {
+      footerLinks[0].textContent = t('imprint');
+      footerLinks[1].textContent = t('privacyPolicy');
+    }
   }
 }
 
