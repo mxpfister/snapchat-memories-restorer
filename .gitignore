@@ -9,8 +9,12 @@ Thumbs.db
 *.swo
 
 # Snapchat Data (local testing)
+test-data/*
 mydata*/
 memories/
 *.zip
-!snapchat-memories.zip
 /snapchat-export-*
+
+# Node
+node_modules/
+coverage/

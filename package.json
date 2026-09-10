@@ -1,0 +1,17 @@
+{
+  "name": "snapchat-memories-saver",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "happy-dom": "^14.0.0",
+    "vitest": "^1.0.0"
+  }
+}
