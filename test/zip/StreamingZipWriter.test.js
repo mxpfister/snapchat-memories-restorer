@@ -31,6 +31,11 @@ describe('StreamingZipWriter', () => {
       expect(writer.entries[0].crc).toBe(1243066710);
       expect(writer.entries[0].size).toBe(11n);
       
+      const expectedDosTime = (date.getHours() << 11) | (date.getMinutes() << 5) | (date.getSeconds() >> 1);
+      const expectedDosDate = ((date.getFullYear() - 1980) << 9) | ((date.getMonth() + 1) << 5) | date.getDate();
+      expect(writer.entries[0].dosTime).toBe(expectedDosTime);
+      expect(writer.entries[0].dosDate).toBe(expectedDosDate);
+      
       expect(mockWritable.write).toHaveBeenCalledTimes(2); // Header + chunk
 
       await writer.finalize();

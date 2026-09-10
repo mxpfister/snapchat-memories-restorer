@@ -110,7 +110,10 @@ describe('CacheManager', () => {
     };
     global.indexedDB.open.mockImplementation(() => {
       setTimeout(() => {
-        if (mockReq.onerror) mockReq.error = new Error('IndexedDB error'); mockReq.onerror();
+        if (mockReq.onerror) {
+          mockReq.error = new Error('IndexedDB error');
+          mockReq.onerror();
+        }
       }, 0);
       return mockReq;
     });

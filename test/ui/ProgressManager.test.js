@@ -33,4 +33,15 @@ describe('ProgressManager', () => {
     updateProgress(0, 0);
     expect(document.getElementById('progressFill').style.width).toBe('0%');
   });
+
+  it('should use German translation for remaining time if language is de', () => {
+    state.getProcessingStartTime.mockReturnValue(Date.now() - 60000);
+    state.getCurrentLanguage.mockReturnValue('de');
+    
+    updateProgress(50, 100);
+    
+    const text = document.getElementById('progressText').textContent;
+    expect(text).toMatch(/Min\. verbleibend/);
+    expect(document.title).toContain('Verarbeitung');
+  });
 });

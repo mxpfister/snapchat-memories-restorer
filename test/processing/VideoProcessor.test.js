@@ -137,6 +137,10 @@ describe('VideoProcessor', () => {
       // EC-28: Ensure both metadata tags are used
       expect(execArgs).toContain('-metadata');
       expect(execArgs).toContain('-metadata:s:v:0');
+      // Verify location formatting
+      expect(execArgs).toContain('location=+10.0000+20.0000/');
+      // Verify date formatting
+      expect(execArgs).toContain('creation_time=2023-01-01T12:00:00.000Z');
     });
   });
 });

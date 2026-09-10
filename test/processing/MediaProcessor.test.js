@@ -29,7 +29,12 @@ describe('MediaProcessor', () => {
       CacheManager.getFromCache.mockResolvedValue(null);
       ImageProcessor.applyPiexif.mockResolvedValue(new ArrayBuffer(8));
       
-      const result = await processMediaGroup(files, {});
+      const result = await processMediaGroup(files, { 
+        metaDate: '2023-01-01', 
+        metaLocation: true 
+      }, null);
+      
+      expect(ImageProcessor.applyPiexif).toHaveBeenCalled();
       expect(result).toBeInstanceOf(ArrayBuffer);
     });
 

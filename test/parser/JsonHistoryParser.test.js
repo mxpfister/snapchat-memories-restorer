@@ -70,10 +70,13 @@ describe('JsonHistoryParser', () => {
       const result = await parseJsonHistory();
       expect(result.byMid['mock-mid']).toBeDefined();
       expect(result.byMid['mock-mid'].latitude).toBe(10);
+      expect(result.byMid['mock-mid'].longitude).toBe(20);
+      expect(result.byMid['mock-mid'].dateRaw).toBe('2023-01-01 12:00:00 UTC');
       
       // Date should have been matched by time
       const keys = Object.keys(result.byTime);
       expect(keys.length).toBe(1);
+      expect(result.byTime[keys[0]].dateRaw).toBe('2023-01-01 12:00:00 UTC');
     });
 
     it('should handle json without Saved Media', async () => {

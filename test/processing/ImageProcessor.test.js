@@ -108,7 +108,14 @@ describe('ImageProcessor', () => {
       
       const result = await applyPiexif(fileBlob, { latitude: 10, longitude: -20 }, true, true, new Date('2023-01-01T12:00:00Z'));
       
-      expect(window.piexif.dump).toHaveBeenCalled();
+      expect(window.piexif.dump).toHaveBeenCalledWith(expect.objectContaining({
+        '0th': expect.any(Object),
+        'Exif': expect.any(Object),
+        'GPS': expect.objectContaining({
+          'GPSLatitudeRef': 'N',
+          'GPSLongitudeRef': 'W'
+        })
+      }));
       expect(window.piexif.insert).toHaveBeenCalled();
       expect(result).toBeInstanceOf(ArrayBuffer);
     });
@@ -209,6 +216,7 @@ describe('ImageProcessor', () => {
       
       // Verify that the original buffer was returned (no EXIF added)
       expect(result.byteLength).toBe(20);
+      expect(UIController.addLog).toHaveBeenCalledWith(expect.stringContaining('EXIF metadata could not be embedded'), 'warn');
     });
   });
 });
