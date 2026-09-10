@@ -10,7 +10,7 @@ export function updateUI() {
   
   if (!getJsonFile() && getMediaFiles().length === 0) {
     document.getElementById('folderList').classList.remove('file-list--empty');
-    document.getElementById('folderList').innerHTML = `<div class="file-item"><span class="file-item__name" style="color: var(--c-error)">${t('invalidFolder')}</span></div>`;
+    document.getElementById('folderList').innerHTML = `<div class="file-item"><span class="file-item__name text-error">${t('invalidFolder')}</span></div>`;
     console.warn('Invalid folder selected: No JSON and no media files found.');
   } else {
     document.getElementById('folderList').classList.remove('file-list--empty');
@@ -18,20 +18,20 @@ export function updateUI() {
     // Show multi-ZIP merge info
     if (getUploadSources().length > 1) {
       const sourceText = getUploadSources().map(s => s.name).join(', ');
-      document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name" style="color: #34c759;">${t('multipleExportsMerged', { sourceText })}</span></div>`;
+      document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name text-success">${t('multipleExportsMerged', { sourceText })}</span></div>`;
     }
     
     if (getJsonFile()) {
         document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name">${t('jsonFoundHtml')}</span><span class="file-item__size">${formatBytes(getJsonFile().size)}</span></div>`;
     } else {
-        document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name" style="color: var(--c-error)">${t('jsonMissingHtml')}</span></div>`;
+        document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name text-error">${t('jsonMissingHtml')}</span></div>`;
     }
     
     if (getMediaFiles().length > 0) {
         const totalSize = getMediaFiles().reduce((sum, file) => sum + file.size, 0);
         document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name">${t('mediaFilesFoundHtml', { count: getMediaFiles().length })}</span><span class="file-item__size">${formatBytes(totalSize)}</span></div>`;
     } else {
-        document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name" style="color: var(--c-error)">${t('noMediaFiles')}</span></div>`;
+        document.getElementById('folderList').innerHTML += `<div class="file-item"><span class="file-item__name text-error">${t('noMediaFiles')}</span></div>`;
     }
   }
 
@@ -106,7 +106,7 @@ export function updateCompatibilityWarning() {
 
   document.getElementById('compatWarning').hidden = false;
   document.getElementById('compatWarningList').innerHTML = messages.map((message) => `
-    <p style="margin: 0; color: var(--c-text);">
+    <p class="compat-warning-item">
       <strong>${message.title}:</strong> ${message.text}
     </p>
   `).join('');
