@@ -35,5 +35,21 @@ This project runs entirely on the client side using Vanilla JavaScript and WebAs
   * **Primary (Modern Browsers):** A custom, memory-efficient `StreamingZipWriter` that streams ZIP packages directly to your local storage via the **File System Access API** (`showSaveFilePicker`), minimizing RAM overhead.
   * **Fallback (Safari/Firefox):** Uses **`JSZip`** to bundle and download the processed files in memory (automatically split into ~1.5GB chunks to prevent browser crashes).
 
+## 💻 Development & Testing
+
+1. **Serve locally:** You can use any local web server. For example:
+   ```bash
+   npx serve .
+   ```
+   Then open `http://localhost:3000` in your browser.
+
+2. **Testing:** This project uses [Vitest](https://vitest.dev/) for unit testing.
+   ```bash
+   npm install
+   npm test               # Run unit tests
+   npm run test:ui        # Run tests with a UI
+   npm run test:coverage  # Generate coverage report
+   ```
+
 ## 📄 License & Privacy
 This is a client-side only tool. Your data never leaves your device.
