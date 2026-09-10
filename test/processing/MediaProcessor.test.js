@@ -15,7 +15,19 @@ vi.mock('../../src/ui/UIController.js');
 function createMockFile(name, ext) {
   return {
     name,
-    arrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(8))
+    arrayBuffer: vi.fn().mockResolvedValue((() => {
+      if (ext === 'mp4') {
+        const buf = new ArrayBuffer(8);
+        const view = new DataView(buf);
+        view.setUint32(0, 8); // size = 8
+        view.setUint8(4, 0x6d); // 'm'
+        view.setUint8(5, 0x6f); // 'o'
+        view.setUint8(6, 0x6f); // 'o'
+        view.setUint8(7, 0x76); // 'v'
+        return buf;
+      }
+      return new ArrayBuffer(8);
+    })())
   };
 }
 
@@ -47,9 +59,24 @@ describe('MediaProcessor', () => {
       // Let's assume processVideoWithFFmpeg returns a File that has arrayBuffer
       VideoProcessor.processVideoWithFFmpeg.mockResolvedValue(createMockFile('out.mp4', 'mp4'));
       
-      const result = await processMediaGroup(files, {});
+      const result = await processMediaGroup(files, { dateRaw: '2023-01-01 12:00:00 UTC' });
       expect(VideoProcessor.processVideoWithFFmpeg).toHaveBeenCalled();
       expect(result).toBeInstanceOf(ArrayBuffer);
+    });
+
+    it('should not delegate corrupt video processing', async () => {
+      VideoProcessor.processVideoWithFFmpeg.mockClear();
+      // Mock file with 'bad' extension which will yield empty ArrayBuffer, meaning no moov atom
+      const mockFile = createMockFile('bad.mp4', 'bad'); 
+      const files = {
+        main: { info: { ext: 'mp4', mid: '124' }, file: mockFile }
+      };
+      
+      CacheManager.getFromCache.mockResolvedValue(null);
+      
+      const result = await processMediaGroup(files, { dateRaw: '2023-01-01 12:00:00 UTC' });
+      expect(VideoProcessor.processVideoWithFFmpeg).not.toHaveBeenCalled();
+      expect(result).toBeInstanceOf(ArrayBuffer); // Should return the original arraybuffer
     });
   });
 

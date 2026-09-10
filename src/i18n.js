@@ -81,6 +81,7 @@ const i18n = {
     corruptVideo: 'Video file is corrupted/unreadable',
     processingVideo: 'Processing video {name} ({percent}%)',
     ffmpegTimeout: 'Video processing timed out for {name}. Original will be preserved.',
+    corruptVideoWarn: 'Original video from Snapchat is corrupted (missing moov atom). It will be saved unmodified but likely cannot be played.',
     fileEmptyHint: '💡 The ZIP file will be filled after processing completes. Please do not open it before.',
     
     // Success messages
@@ -181,6 +182,7 @@ const i18n = {
     corruptVideo: 'Video-Datei ist korrupt/unlesbar',
     processingVideo: 'Verarbeite Video {name} ({percent}%)',
     ffmpegTimeout: 'Zeitüberschreitung bei der Videoverarbeitung von {name}. Original wird beibehalten.',
+    corruptVideoWarn: 'Original-Video von Snapchat ist beschädigt (moov-Atom fehlt). Es wird unmodifiziert gespeichert, lässt sich aber vermutlich nicht abspielen.',
     fileEmptyHint: '💡 Die ZIP-Datei wird erst nach Abschluss der Verarbeitung gefüllt. Bitte nicht vorher öffnen.',
     
     // Success messages

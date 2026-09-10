@@ -31,6 +31,40 @@ export async function getMissingMetadata(file, meta) {
 }
 
 /**
+ * Check if an MP4 file has a valid moov atom.
+ * Files without moov are corrupt/truncated and cannot be played.
+ */
+function isValidMp4(buffer) {
+  const view = new DataView(buffer);
+  const len = buffer.byteLength;
+  let offset = 0;
+  
+  while (offset <= len - 8) {
+    const size = view.getUint32(offset);
+    const type = String.fromCharCode(
+      view.getUint8(offset + 4), view.getUint8(offset + 5),
+      view.getUint8(offset + 6), view.getUint8(offset + 7)
+    );
+    
+    if (type === 'moov') return true;
+    
+    // size 0 = extends to end, size 1 = 64-bit extended size
+    if (size === 0) break;
+    if (size === 1) {
+      if (offset + 16 > len) break;
+      const hiSize = view.getUint32(offset + 8);
+      const loSize = view.getUint32(offset + 12);
+      if (hiSize > 0) break; // Too large to handle
+      offset += loSize;
+    } else {
+      if (size < 8) break; // Invalid atom size
+      offset += size;
+    }
+  }
+  return false;
+}
+
+/**
  * Process media files (Overlay & EXIF data)
  */
 export async function processMediaGroup(files, meta) {
@@ -54,7 +88,16 @@ export async function processMediaGroup(files, meta) {
 
   let currentFile = mainFile;
 
-  if (isVideo && (needsOverlay || needDate || needLoc)) {
+  let isCorruptVideo = false;
+  if (isVideo) {
+    const buffer = await mainFile.arrayBuffer();
+    isCorruptVideo = !isValidMp4(buffer);
+    if (isCorruptVideo) {
+      addLog(`⚠️ ${mainFile.name}: ${t('corruptVideoWarn')}`, 'warn');
+    }
+  }
+
+  if (isVideo && !isCorruptVideo && (needsOverlay || needDate || needLoc)) {
     try {
       currentFile = await processVideoWithFFmpeg(mainFile, overlayFile, needDate, needLoc, date, meta);
     } catch (err) {
