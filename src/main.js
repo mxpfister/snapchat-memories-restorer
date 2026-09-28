@@ -8,7 +8,7 @@ import { parseJsonHistory, extractMediaInfo } from './parser/JsonHistoryParser.j
 import { detectTimezoneOffset, resolveMetadata } from './parser/TimezoneDetector.js';
 import { StreamingZipWriter } from './zip/StreamingZipWriter.js';
 import { processMediaGroup, processAndZip } from './processing/MediaProcessor.js';
-import { clearCache } from './cache/CacheManager.js';
+import { clearCache, requestPersistentStorage } from './cache/CacheManager.js';
 import { asyncPool } from './utils/async-pool.js';
 import { parseSnapchatDate } from './utils/date.js';
 import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS } from './constants.js';
@@ -77,6 +77,9 @@ async function handleProcess() {
     if (elapsedTimeEl) elapsedTimeEl.textContent = `\u23f1\ufe0f ${mins}:${secs.toString().padStart(2, '0')}`;
   }, 1000);
   document.getElementById('progressFill').classList.add('progress-bar__fill--processing');
+  
+  // Request persistent storage for larger quota limits
+  await requestPersistentStorage();
   
   await requestWakeLock();
   
